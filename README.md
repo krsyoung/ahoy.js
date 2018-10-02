@@ -183,7 +183,8 @@ ahoy.configure({
   platform: "Web",
   useBeacon: false,
   startOnReady: true,
-  trackVisits: true
+  trackVisits: true,
+  headers: {}
 });
 ```
 

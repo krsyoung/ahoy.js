@@ -11,7 +11,8 @@ let config = {
   useBeacon: true,
   startOnReady: true,
   trackVisits: true,
-  cookies: true
+  cookies: true,
+  headers: {}
 };
 
 let ahoy = window.ahoy || window.Ahoy || {};
@@ -22,6 +23,10 @@ ahoy.configure = function (options) {
       config[key] = options[key];
     }
   }
+};
+
+ahoy.setHeader = function (key, value) {
+  config.headers[key] = value
 };
 
 // legacy
@@ -154,11 +159,15 @@ function sendRequest(url, data, success) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         beforeSend: CSRFProtection,
-        success: success
+        success: success,
+        headers: config.headers
       });
     } else {
       let xhr = new XMLHttpRequest();
       xhr.open("POST", url, true);
+      for (var header in config.headers) {
+        xhr.setRequestHeader(header, config.headers[header]);
+      }
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.onload = function() {
         if (xhr.status === 200) {
